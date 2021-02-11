@@ -1,0 +1,10 @@
+#canvas1 {
+      widows: 1024px;
+      height: 1024px;
+      border: 1px solid #403F4C;
+      background: #E84855;
+      position: absolute;
+      top:10%;
+      left:10%;
+      transform: translate (-50%, -50%);
+}
