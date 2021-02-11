@@ -1,0 +1,1761 @@
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="index_data/styles.css">
+    <link rel="stylesheet" type="text/css" href="index_data/dark.css">
+    <link rel="stylesheet" href="index_data/w3.css"> 
+    <title>Progress Knight</title>
+</head>
+<body id="body" class="dark">
+    <div class="w3-margin"> 
+        <h1>Progress Knight</h1>
+        <div style="width: 1220px; height: 600px"> 
+            <div class="panel w3-padding scroll" style="width: 300px; height: 700; float: left">
+                <span id="deathText" class="hidden">
+                    <div style="font-size: large; color: red">Age has caught up to you</div>
+                    <div class="sidebar-element" style="color: gray">Your age has met your lifespan, use the amulet to rebirth before you pass away</div>
+                </span>
+
+                <div class="" style="font-size: large">Age <span id="ageDisplay">14</span> Day <span id="dayDisplay">181</span></div>
+                <div class="sidebar-element" style="color: gray">Lifespan: <span id="lifespanDisplay">70</span> years</div>
+                
+                <button id="pauseButton" class="w3-button button sidebar-element" onclick="setPause()">Pause</button>
+
+                <span id="automation" class="inline hidden" style="margin-left: 8px">
+                    <span>
+                        <div class="inline">Auto-promote</div>
+                        <input type="checkbox" class="inline" id="autoPromote">
+                    </span>
+                    <br>
+                    <span>
+                        <div class="inline">Auto-learn</div>
+                        <input type="checkbox" class="inline sidebar-element" id="autoLearn">
+                    </span>
+                </span>
+
+                <div style="font-size: large" id="coinDisplay">
+                    <span style="color: rgb(121, 185, 199);"></span>
+                    <span style="color: rgb(229, 193, 0);"></span>
+                    <span style="color: rgb(168, 168, 168);">15s </span>
+                    <span style="color: rgb(161, 92, 47);">57c</span>
+                </div>
+                <div style="color: gray">Balance (in coins)</div>
+
+                <ul class="sidebar-element" style="padding-left: 20px;">
+                    <li><span style="color: rgb(9, 160, 230)">Net/day: </span><b id="signDisplay" style="color: green;">+</b><span id="netDisplay">
+                        <span style="color: rgb(121, 185, 199);"></span>
+                        <span style="color: rgb(229, 193, 0);"></span>
+                        <span style="color: rgb(168, 168, 168);"></span>
+                        <span style="color: rgb(161, 92, 47);">10c</span>
+                    </span></li>
+                    <li><span style="color: green">Income/day: </span><span id="incomeDisplay">
+                        <span style="color: rgb(121, 185, 199);"></span>
+                        <span style="color: rgb(229, 193, 0);"></span>
+                        <span style="color: rgb(168, 168, 168);"></span>
+                        <span style="color: rgb(161, 92, 47);">10c</span>
+                    </span></li>
+                    <li><span style="color: red">Expense/day: </span><span id="expenseDisplay">
+                        <span style="color: rgb(121, 185, 199);"></span>
+                        <span style="color: rgb(229, 193, 0);"></span>
+                        <span style="color: rgb(168, 168, 168);"></span>
+                        <span style="color: rgb(161, 92, 47);">0c</span>
+                    </span></li>
+                </ul>
+
+                <span id="quickTaskDisplay" class="hidden">
+                    <div style="width: 230px" class="small-margin inline job progress-bar progressBar">
+                        <div class="progress-fill progressFill" style="background-color: rgb(225, 165, 0); width: 84.6154%;"></div>
+                        <div class="progress-text name">Beggar lvl 7</div>
+                    </div>
+                    <div class="sidebar-element" style="color: gray">Current job</div>
+
+                    <div style="width: 230px" class="small-margin skill progress-bar progressBar">
+                        <div class="progress-fill progressFill" style="background-color: rgb(225, 165, 0); width: 48.8114%;"></div>
+                        <div class="progress-text name">Concentration lvl 5</div>              
+                    </div>
+                    <div class="sidebar-element" style="color: gray">Current skill</div>
+                </span>
+
+                <div style="font-size: large"><span style="color: rgb(15, 105, 207)">Happiness: </span><span id="happinessDisplay">1.0</span></div>
+                <div style="color: gray" class="sidebar-element">Affects all xp gain</div>
+
+                <span id="evilInfo" class="hidden">
+                    <div style="font-size: large"><span style="color: rgb(200, 0, 0)">Evil: </span><span id="evilDisplay">0.0</span></div>
+                    <div style="color: gray" class="sidebar-element">Affects dark magic xp gain</div>
+                </span>
+
+                <!--
+                <span id="scheduling">
+                    <div style="font-size: large">Scheduling</div>
+                    <div style="color: gray" class="sidebar-element">Schedule time to jobs/skills</div>
+                    <span style="height: 30px"> 
+                        <p style="width: 5px">Jobs</br>(32%)</p>
+                        <input id="schedulingSlider" class="slider" type="range" min="0" max="100" value="0">
+                        <p style="width: 5px">Skills</br>(68%)</p>
+                    </span>
+                </span>
+                -->
+
+                <span id="timeWarping" class="hidden">
+                    <div style="font-size: large"><span style="color: rgb(204, 34, 219)">Time warping: </span><span id="timeWarpingDisplay">x1.00</span></div>
+                    <div style="color: gray">Affects game speed</div>
+                    <button id="timeWarpingButton" class="w3-button button sidebar-element" style="margin-top: 5px; width:150px" onclick="setTimeWarping()">Disable warp</button>
+                </span>
+            </div>
+
+            <div class="panel w3-margin-left" style="width: 900px; height: 40px; float: left">
+                <div class="w3-button w3-bar-item tabButton w3-blue-gray" id="jobTabButton" onclick="setTab(this, 'jobs')">Jobs</div>
+                <div class="w3-button w3-bar-item tabButton" onclick="setTab(this, 'skills')">Skills</div>
+                <div class="w3-button w3-bar-item tabButton" id="shopTabButton" onclick="setTab(this, 'shop')">Shop</div>
+                <div class="w3-button w3-bar-item tabButton hidden" id="rebirthTabButton" onclick="setTab(this, 'rebirth')">Amulet</div>
+                <div class="w3-button w3-bar-item tabButton" onclick="setTab(this, 'settings')" style="float: right">Settings</div>
+            </div>
+
+            <div class="panel w3-margin-left w3-margin-top w3-padding scroll" style="width: 900px; height: 644px; float: left">
+                <template class="headerRowTaskTemplate">
+                    <tr>
+                        <th class="category" style="width: 250px">Job</th>
+                        <th>Level</th>
+                        <th class="valueType">Value type</th>
+                        <th>Xp/day</th>
+                        <th>Xp left</th>
+                        <th class="maxLevel">Max level</th>
+                        <th class="skipSkill">Skip</th>
+                    </tr>
+                </template>
+
+                <template class="headerRowItemTemplate">
+                    <tr>
+                        <th class="category" style="width: 250px">Item</th>
+                        <th style="width: 100px">Active</th>
+                        <th style="width: 250px">Effect</th>
+                        <th>Expense/day</th>
+                    </tr>
+                </template>
+
+                <template class="rowTaskTemplate">
+                    <tr>
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill"></div>
+                                <div class="progress-text name">Task</div>
+                                <span class="tooltipText"></span>
+                            </div>
+                        </td>
+                        <td class="level">Level</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">Xp/day</td>
+                        <td class="xpLeft">Xp left</td>
+                        <td class="maxLevel">Max level</td>
+                        <td class="skipSkill">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr>
+                </template>
+
+                <template class="rowItemTemplate">
+                    <tr>
+                        <td>
+                            
+                            <button class="button item-button tooltip">
+                                <span class="name"></span>
+                                <span class="tooltipText">tooltip</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px;"></div>
+                            </div>
+                        </td>
+                        <td class="effect"></td>
+                        <td class="expense">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </td>
+                    </tr>
+                </template>
+
+                <template class="requiredRowTemplate">
+                    <td class="w3-text-gray" style="padding-left: 16px" colspan="5">
+                        Required: 
+                        <span class="value" colspan="5">
+                            <span class="levels"></span>
+                            <span class="coins">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span style="color: rgb(200, 0, 0)" class="evil"></span>
+                        </span>
+                    </td> 
+                </template>
+
+                <div class="tab" id="jobs" style="display: block;">
+                    <table id="jobTable" class="w3-table w3-bordered">
+                    <tr style="background-color: rgb(85, 166, 48); color: rgb(255, 255, 255);" class="Commonwork headerRow">
+                        <th class="category" style="width: 250px">Common work</th>
+                        <th>Level</th>
+                        <th class="valueType">Income/day</th>
+                        <th>Xp/day</th>
+                        <th>Xp left</th>
+                        <th class="maxLevel hidden">Max level</th>
+                        <th class="skipSkill" style="display: none;">Skip</th>
+                    </tr><tr id="row Beggar">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill current" style="width: 84.6154%;"></div>
+                                <div class="progress-text name">Beggar</div>
+                                <span class="tooltipText">Struggle day and night for a couple of copper coins. It feels like you are at the brink of death each day.</span>
+                            </div>
+                        </td>
+                        <td class="level">7</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span style="color: rgb(161, 92, 47);">10c</span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">66</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Farmer" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Farmer</div>
+                                <span class="tooltipText">Plow the fields and grow the crops. It's not much but it's honest work.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span style="color: rgb(161, 92, 47);">9c</span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Fisherman" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Fisherman</div>
+                                <span class="tooltipText">Reel in various fish and sell them for a handful of coins. A relaxing but still a poor paying job.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span style="color: rgb(161, 92, 47);">15c</span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">200</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Miner" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Miner</div>
+                                <span class="tooltipText">Delve into dangerous caverns and mine valuable ores. The pay is quite meager compared to the risk involved.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span style="color: rgb(161, 92, 47);">40c</span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">400</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Blacksmith" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Blacksmith</div>
+                                <span class="tooltipText">Smelt ores and carefully forge weapons for the military. A respectable and OK paying commoner job.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span style="color: rgb(161, 92, 47);">80c</span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">800</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Merchant" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Merchant</div>
+                                <span class="tooltipText">Travel from town to town, bartering fine goods. The job pays decently well and is a lot less manually-intensive.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);">1s </span>
+                                <span style="color: rgb(161, 92, 47);">50c</span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">1.6k</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><td class="w3-text-gray requiredRow Commonwork" style="padding-left: 16px" colspan="5" id="Common work">
+                        Required: 
+                        <span class="value" colspan="5">
+                            <span class="levels"> Beggar level 7/10</span>
+                            <span class="coins hiddenTask">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span style="color: rgb(200, 0, 0)" class="evil hiddenTask"></span>
+                        </span>
+                    </td><tr style="background-color: rgb(230, 57, 70); color: rgb(255, 255, 255);" class="Military headerRow">
+                        <th class="category" style="width: 250px">Military</th>
+                        <th>Level</th>
+                        <th class="valueType">Income/day</th>
+                        <th>Xp/day</th>
+                        <th>Xp left</th>
+                        <th class="maxLevel hidden">Max level</th>
+                        <th class="skipSkill" style="display: none;">Skip</th>
+                    </tr><tr id="row Squire" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Squire</div>
+                                <span class="tooltipText">Carry around your knight's shield and sword along the battlefield. Very meager pay but the work experience is quite valuable.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span style="color: rgb(161, 92, 47);">5c</span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Footman" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Footman</div>
+                                <span class="tooltipText">Put down your 
+life to battle with enemy soldiers. A courageous, respectable job but 
+you are still worthless in the grand scheme of things.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span style="color: rgb(161, 92, 47);">50c</span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">1.0k</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Veteran footman" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Veteran footman</div>
+                                <span class="tooltipText">More 
+experienced and useful than the average footman, take out the enemy 
+forces in battle with your might. The pay is not that bad.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);">1s </span>
+                                <span style="color: rgb(161, 92, 47);">20c</span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">10.0k</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Knight" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Knight</div>
+                                <span class="tooltipText">Slash and 
+pierce through enemy soldiers with ease, while covered in steel from 
+head to toe. A decently paying and very respectable job.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);">3s </span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">100.0k</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Veteran knight" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Veteran knight</div>
+                                <span class="tooltipText">Utilising your
+ unmatched combat ability, slaugher enemies effortlessly. Most footmen 
+in the military would never be able to acquire such a well paying job 
+like this.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);">10s </span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">1.0M</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Elite knight" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Elite knight</div>
+                                <span class="tooltipText">Obliterate 
+squadrons of enemy soldiers in one go with extraordinary proficiency, 
+while equipped with the finest gear. Such a feared unit on the 
+battlefield is paid extremely well.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);">30s </span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">7.5M</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Holy knight" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Holy knight</div>
+                                <span class="tooltipText">Collapse 
+entire armies in mere seconds with your magically imbued blade. The 
+handful of elite knights who attain this level of power are showered 
+with coins.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);">1g </span>
+                                <span style="color: rgb(168, 168, 168);">50s </span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">40.0M</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Legendary knight" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Legendary knight</div>
+                                <span class="tooltipText">Feared 
+worldwide, obliterate entire nations in a blink of an eye. Roughly every
+ century, only one holy knight is worthy of receiving such an esteemed 
+title.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);">5g </span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">150.0M</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><td class="w3-text-gray requiredRow Military" style="padding-left: 16px" colspan="5" id="Military">
+                        Required: 
+                        <span class="value" colspan="5">
+                            <span class="levels"> Strength level 0/5</span>
+                            <span class="coins hiddenTask">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span style="color: rgb(200, 0, 0)" class="evil hiddenTask"></span>
+                        </span>
+                    </td><tr style="background-color: rgb(199, 21, 133); color: rgb(255, 255, 255);" class="TheArcaneAssociation headerRow hidden">
+                        <th class="category" style="width: 250px">The Arcane Association</th>
+                        <th>Level</th>
+                        <th class="valueType">Income/day</th>
+                        <th>Xp/day</th>
+                        <th>Xp left</th>
+                        <th class="maxLevel hidden">Max level</th>
+                        <th class="skipSkill" style="display: none;">Skip</th>
+                    </tr><tr id="row Student" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Student</div>
+                                <span class="tooltipText">Study the 
+theory of mana and practice basic spells. There is minor pay to cover 
+living costs, however, this is a necessary stage in becoming a mage.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);">1s </span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">100.0k</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Apprentice mage" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Apprentice mage</div>
+                                <span class="tooltipText">Under the 
+supervision of a mage, perform basic spells against enemies in battle. 
+Generous pay will be provided to cover living costs.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);">10s </span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">1.0M</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Mage" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Mage</div>
+                                <span class="tooltipText">Turn the tides
+ of battle through casting intermediate spells and mentor other 
+apprentices. The pay for this particular job is extremely high.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);">75s </span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">10.0M</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Wizard" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Wizard</div>
+                                <span class="tooltipText">Utilise 
+advanced spells to ravage and destroy entire legions of enemy soldiers. 
+Only a small percentage of mages deserve to attain this role and are 
+rewarded with an insanely high pay.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);">5g </span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">100.0M</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Master wizard" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Master wizard</div>
+                                <span class="tooltipText">Blessed with 
+unparalleled talent, perform unbelievable feats with magic at will. It 
+is said that a master wizard has enough destructive power to wipe an 
+empire off the map.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);">25g </span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">10.0B</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Chairman" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Chairman</div>
+                                <span class="tooltipText">Spend your 
+days administrating The Arcane Association and investigate the concepts 
+of true immortality. The chairman receives ludicrous amounts of pay 
+daily.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect"></div>
+                            <div class="income">
+                                <span style="color: rgb(121, 185, 199);">1p </span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">10</td>
+                        <td class="xpLeft">1.0T</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><td class="w3-text-gray requiredRow TheArcaneAssociation hidden" style="padding-left: 16px" colspan="5" id="The Arcane Association">
+                        Required: 
+                        <span class="value" colspan="5">
+                            <span class="levels"> Concentration level 5/200, Meditation level 0/200</span>
+                            <span class="coins hiddenTask">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span style="color: rgb(200, 0, 0)" class="evil hiddenTask"></span>
+                        </span>
+                    </td></table>
+                </div>
+
+                <div class="tab" id="skills" style="display: none;">
+                    <table id="skillTable" class="w3-table w3-bordered">
+                    <tr style="background-color: rgb(74, 78, 105); color: rgb(255, 255, 255);" class="Fundamentals headerRow">
+                        <th class="category" style="width: 250px">Fundamentals</th>
+                        <th>Level</th>
+                        <th class="valueType">Effect</th>
+                        <th>Xp/day</th>
+                        <th>Xp left</th>
+                        <th class="maxLevel hidden">Max level</th>
+                        <th class="skipSkill" style="display: none;">Skip</th>
+                    </tr><tr id="row Concentration">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill current" style="width: 48.8114%;"></div>
+                                <div class="progress-text name">Concentration</div>
+                                <span class="tooltipText">Improve your learning speed through practising intense concentration activities.</span>
+                            </div>
+                        </td>
+                        <td class="level">5</td>
+                        <td class="value">
+                            <div class="effect">x1.05 Skill xp</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">11</td>
+                        <td class="xpLeft">323</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Productivity" class="">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Productivity</div>
+                                <span class="tooltipText">Learn to procrastinate less at work and receive more job experience per day.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Job xp</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">11</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Bargaining" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Bargaining</div>
+                                <span class="tooltipText">Study the tricks of the trade and persuasive skills to lower any type of expense.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Expenses</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">11</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Meditation" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Meditation</div>
+                                <span class="tooltipText">Fill your mind with peace and tranquility to tap into greater happiness from within.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Happiness</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">11</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><td class="w3-text-gray requiredRow Fundamentals" style="padding-left: 16px" colspan="5" id="Fundamentals">
+                        Required: 
+                        <span class="value" colspan="5">
+                            <span class="levels"> Concentration level 5/20</span>
+                            <span class="coins hiddenTask">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span style="color: rgb(200, 0, 0)" class="evil hiddenTask"></span>
+                        </span>
+                    </td><tr style="background-color: rgb(255, 112, 77); color: rgb(255, 255, 255);" class="Combat headerRow">
+                        <th class="category" style="width: 250px">Combat</th>
+                        <th>Level</th>
+                        <th class="valueType">Effect</th>
+                        <th>Xp/day</th>
+                        <th>Xp left</th>
+                        <th class="maxLevel hidden">Max level</th>
+                        <th class="skipSkill" style="display: none;">Skip</th>
+                    </tr><tr id="row Strength">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Strength</div>
+                                <span class="tooltipText">Condition your body and strength through harsh training. Stronger individuals are paid more in the military.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Military pay</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">11</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Battle tactics" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Battle tactics</div>
+                                <span class="tooltipText">Create and revise battle strategies, improving experience gained in the military.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Military xp</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">11</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Muscle memory" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Muscle memory</div>
+                                <span class="tooltipText">Strengthen your neurons through habit and repetition, improving strength gains throughout the body.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Strength xp</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">11</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><td class="w3-text-gray requiredRow Combat" style="padding-left: 16px" colspan="5" id="Combat">
+                        Required: 
+                        <span class="value" colspan="5">
+                            <span class="levels"> Concentration level 5/20</span>
+                            <span class="coins hiddenTask">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span style="color: rgb(200, 0, 0)" class="evil hiddenTask"></span>
+                        </span>
+                    </td><tr style="background-color: rgb(135, 95, 154); color: rgb(255, 255, 255);" class="Magic headerRow">
+                        <th class="category" style="width: 250px">Magic</th>
+                        <th>Level</th>
+                        <th class="valueType">Effect</th>
+                        <th>Xp/day</th>
+                        <th>Xp left</th>
+                        <th class="maxLevel hidden">Max level</th>
+                        <th class="skipSkill" style="display: none;">Skip</th>
+                    </tr><tr id="row Mana control" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Mana control</div>
+                                <span class="tooltipText">Strengthen your mana channels throughout your body, aiding you in becoming a more powerful magical user.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 T.A.A. xp</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">11</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Immortality" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Immortality</div>
+                                <span class="tooltipText">Lengthen your lifespan through the means of magic. However, is this truly the immortality you have tried seeking for...?</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Longer lifespan</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">11</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Time warping" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Time warping</div>
+                                <span class="tooltipText">Bend space and time through forbidden techniques, resulting in a faster gamespeed.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Gamespeed</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">11</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Super immortality" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Super immortality</div>
+                                <span class="tooltipText">Through harnessing ancient, forbidden techniques, lengthen your lifespan drastically beyond comprehension.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Longer lifespan</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">11</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><td class="w3-text-gray requiredRow Magic" style="padding-left: 16px" colspan="5" id="Magic">
+                        Required: 
+                        <span class="value" colspan="5">
+                            <span class="levels"> Concentration level 5/200, Meditation level 0/200</span>
+                            <span class="coins hiddenTask">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span style="color: rgb(200, 0, 0)" class="evil hiddenTask"></span>
+                        </span>
+                    </td><tr style="background-color: rgb(115, 0, 15); color: rgb(255, 255, 255);" class="Darkmagic headerRow hidden">
+                        <th class="category" style="width: 250px">Dark magic</th>
+                        <th>Level</th>
+                        <th class="valueType">Effect</th>
+                        <th>Xp/day</th>
+                        <th>Xp left</th>
+                        <th class="maxLevel hidden">Max level</th>
+                        <th class="skipSkill" style="display: none;">Skip</th>
+                    </tr><tr id="row Dark influence" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Dark influence</div>
+                                <span class="tooltipText">Encompass 
+yourself with formidable power bestowed upon you by evil, allowing you 
+to pick up and absorb any job or skill with ease.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 All xp</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">0</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Evil control" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Evil control</div>
+                                <span class="tooltipText">Tame the raging and growing evil within you, improving evil gain in-between rebirths.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Evil gain</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">0</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Intimidation" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Intimidation</div>
+                                <span class="tooltipText">Learn to emit a devilish aura which strikes extreme fear into other merchants, forcing them to give you heavy discounts.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Expenses</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">0</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Demon training" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Demon training</div>
+                                <span class="tooltipText">A mere human 
+body is too feeble and weak to withstand evil. Train with forbidden 
+methods to slowly manifest into a demon, capable of absorbing knowledge 
+rapidly.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 All xp</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">0</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Blood meditation" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Blood meditation</div>
+                                <span class="tooltipText">Grow and culture the evil within you through the sacrifise of other living beings, drastically increasing evil gain.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Evil gain</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">0</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><tr id="row Demon's wealth" class="hidden">
+                        <td>
+                            <div class="progress-bar progressBar tooltip">
+                                <div class="progress-fill progressFill" style="width: 0%;"></div>
+                                <div class="progress-text name">Demon's wealth</div>
+                                <span class="tooltipText">Through the means of dark magic, multiply the raw matter of the coins you receive from your job.</span>
+                            </div>
+                        </td>
+                        <td class="level">0</td>
+                        <td class="value">
+                            <div class="effect">x1.00 Job pay</div>
+                            <div class="income">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                        <td class="xpGain">0</td>
+                        <td class="xpLeft">100</td>
+                        <td class="maxLevel hidden">0</td>
+                        <td class="skipSkill" style="display: none;">
+                            <input class="checkbox" type="checkbox">
+                        </td>
+                    </tr><td class="w3-text-gray requiredRow Darkmagic hidden" style="padding-left: 16px" colspan="5" id="Dark magic">
+                        Required: 
+                        <span class="value" colspan="5">
+                            <span class="levels hiddenTask"></span>
+                            <span class="coins hiddenTask">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span style="color: rgb(200, 0, 0)" class="evil">1 evil</span>
+                        </span>
+                    </td></table>
+                </div>
+
+                <div class="tab" id="shop" style="display: none;">
+                    <table id="itemTable" class="w3-table w3-bordered">
+                    <tr style="background-color: rgb(33, 158, 188); color: rgb(255, 255, 255);" class="Properties headerRow">
+                        <th class="category" style="width: 250px">Properties</th>
+                        <th style="width: 100px">Active</th>
+                        <th style="width: 250px">Effect</th>
+                        <th>Expense/day</th>
+                    </tr><tr id="row Homeless">
+                        <td>
+                            
+                            <button class="button item-button tooltip">
+                                <span class="name">Homeless</span>
+                                <span class="tooltipText">Sleep on the uncomfortable, filthy streets while almost freezing to death every night. It cannot get any worse than this.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: rgb(33, 158, 188);"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x1.0 Happiness</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);"></span>
+                            <span style="color: rgb(161, 92, 47);">0c</span>
+                        </td>
+                    </tr><tr id="row Tent">
+                        <td>
+                            
+                            <button class="button item-button tooltip">
+                                <span class="name">Tent</span>
+                                <span class="tooltipText">A thin sheet 
+of tattered cloth held up by a couple of feeble, wooden sticks. Horrible
+ living conditions but at least you have a roof over your head.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x1.4 Happiness</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);"></span>
+                            <span style="color: rgb(161, 92, 47);">15c</span>
+                        </td>
+                    </tr><tr id="row Wooden hut" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip">
+                                <span class="name">Wooden hut</span>
+                                <span class="tooltipText">Shabby logs 
+and dirty hay glued together with horse manure. Much more sturdy than a 
+tent, however, the stench isn't very pleasant.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x2.0 Happiness</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);">1s </span>
+                            <span></span>
+                        </td>
+                    </tr><tr id="row Cottage" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip">
+                                <span class="name">Cottage</span>
+                                <span class="tooltipText">Structured with a timber frame and a thatched roof. Provides decent living conditions for a fair price.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x3.5 Happiness</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);">7s </span>
+                            <span style="color: rgb(161, 92, 47);">50c</span>
+                        </td>
+                    </tr><tr id="row House" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip" disabled="disabled">
+                                <span class="name">House</span>
+                                <span class="tooltipText">A building 
+formed from stone bricks and sturdy timber, which contains a few rooms. 
+Although quite expensive, it is a comfortable abode.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x6.0 Happiness</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);">30s </span>
+                            <span></span>
+                        </td>
+                    </tr><tr id="row Large house" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip" disabled="disabled">
+                                <span class="name">Large house</span>
+                                <span class="tooltipText">Much larger 
+than a regular house, which boasts even more rooms and multiple floors. 
+The building is quite spacious but comes with a hefty price tag.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x12.0 Happiness</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);">2g </span>
+                            <span style="color: rgb(168, 168, 168);">50s </span>
+                            <span></span>
+                        </td>
+                    </tr><tr id="row Small palace" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip" disabled="disabled">
+                                <span class="name">Small palace</span>
+                                <span class="tooltipText">A very rich 
+and meticulously built structure rimmed with fine metals such as silver.
+ Extremely high expenses to maintain for a lavish lifestyle.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x25.0 Happiness</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);">30g </span>
+                            <span style="color: rgb(168, 168, 168);"></span>
+                            <span></span>
+                        </td>
+                    </tr><tr id="row Grand palace" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip" disabled="disabled">
+                                <span class="name">Grand palace</span>
+                                <span class="tooltipText">A grand 
+residence completely composed of gold and silver. Provides the utmost 
+luxurious and comfortable living conditions possible for a ludicrous 
+price.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x60.0 Happiness</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);">5p </span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);"></span>
+                            <span></span>
+                        </td>
+                    </tr><td class="w3-text-gray requiredRow Properties" style="padding-left: 16px" colspan="5" id="Properties">
+                        Required: 
+                        <span class="value" colspan="5">
+                            <span class="levels hiddenTask"></span>
+                            <span class="coins">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);">1g </span>
+                                <span style="color: rgb(168, 168, 168);"></span>
+                                <span></span>
+                            </span>
+                            <span style="color: rgb(200, 0, 0)" class="evil hiddenTask"></span>
+                        </span>
+                    </td><tr style="background-color: rgb(181, 101, 118); color: rgb(255, 255, 255);" class="Misc headerRow">
+                        <th class="category" style="width: 250px">Misc</th>
+                        <th style="width: 100px">Active</th>
+                        <th style="width: 250px">Effect</th>
+                        <th>Expense/day</th>
+                    </tr><tr id="row Book">
+                        <td>
+                            
+                            <button class="button item-button tooltip">
+                                <span class="name">Book</span>
+                                <span class="tooltipText">A place to write down all your thoughts and discoveries, allowing you to learn a lot more quickly.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x1.5 Skill xp</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);"></span>
+                            <span style="color: rgb(161, 92, 47);">10c</span>
+                        </td>
+                    </tr><tr id="row Dumbbells" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip">
+                                <span class="name">Dumbbells</span>
+                                <span class="tooltipText">Heavy tools used in strenuous exercise to toughen up and accumulate strength even faster than before. </span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x1.5 Strength xp</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);"></span>
+                            <span style="color: rgb(161, 92, 47);">50c</span>
+                        </td>
+                    </tr><tr id="row Personal squire" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip">
+                                <span class="name">Personal squire</span>
+                                <span class="tooltipText">Assists you in completing day to day activities, giving you more time to be productive at work.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x2.0 Job xp</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);">2s </span>
+                            <span></span>
+                        </td>
+                    </tr><tr id="row Steel longsword" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip">
+                                <span class="name">Steel longsword</span>
+                                <span class="tooltipText">A fine blade used to slay enemies even quicker in combat and therefore gain more experience.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x2.0 Military xp</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);">10s </span>
+                            <span></span>
+                        </td>
+                    </tr><tr id="row Butler" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip" disabled="disabled">
+                                <span class="name">Butler</span>
+                                <span class="tooltipText">Keeps your 
+household clean at all times and also prepares three delicious meals per
+ day, leaving you in a happier, stress-free mood.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x1.5 Happiness</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);">75s </span>
+                            <span></span>
+                        </td>
+                    </tr><tr id="row Sapphire charm" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip" disabled="disabled">
+                                <span class="name">Sapphire charm</span>
+                                <span class="tooltipText">Embedded with a
+ rare sapphire, this charm activates more mana channels within your 
+body, providing a much easier time learning magic.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x3.0 Magic xp</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);"></span>
+                            <span style="color: rgb(229, 193, 0);">5g </span>
+                            <span style="color: rgb(168, 168, 168);"></span>
+                            <span></span>
+                        </td>
+                    </tr><tr id="row Study desk" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip" disabled="disabled">
+                                <span class="name">Study desk</span>
+                                <span class="tooltipText">A dedicated area which provides many fine stationary and equipment designed for furthering your progress in research.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x2.0 Skill xp</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);">1p </span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);"></span>
+                            <span></span>
+                        </td>
+                    </tr><tr id="row Library" class="hidden">
+                        <td>
+                            
+                            <button class="button item-button tooltip" disabled="disabled">
+                                <span class="name">Library</span>
+                                <span class="tooltipText">Stores a collection of books, each containing vast amounts of information from basic life skills to complex magic spells.</span>
+                            </button>
+                            
+                        </td>
+                        <td>
+                            <div class="w3-border w3-circle" style="width: 40px; height: 40px; padding: 7px">
+                                <div class="active w3-circle" style="width: 24px; height: 24px; background-color: white;"></div>
+                            </div>
+                        </td>
+                        <td class="effect">x1.5 Skill xp</td>
+                        <td class="expense">
+                            <span style="color: rgb(121, 185, 199);">10p </span>
+                            <span style="color: rgb(229, 193, 0);"></span>
+                            <span style="color: rgb(168, 168, 168);"></span>
+                            <span></span>
+                        </td>
+                    </tr><td class="w3-text-gray requiredRow Misc" style="padding-left: 16px" colspan="5" id="Misc">
+                        Required: 
+                        <span class="value" colspan="5">
+                            <span class="levels hiddenTask"></span>
+                            <span class="coins">
+                                <span style="color: rgb(121, 185, 199);"></span>
+                                <span style="color: rgb(229, 193, 0);"></span>
+                                <span style="color: rgb(168, 168, 168);">50s </span>
+                                <span></span>
+                            </span>
+                            <span style="color: rgb(200, 0, 0)" class="evil hiddenTask"></span>
+                        </span>
+                    </td></table>
+                </div>
+
+                <div class="tab" id="rebirth" style="display: none;">
+                    <ul>
+                        <li style="margin: 8px;">
+                            You stumble across a strange looking amulet on your 25th birthday. It does not look like
+                            it has any worth on the market given that it's made from cheap-looking copper. However, you
+                            feel a weird urge to keep the amulet, so you slip it into your pocket for safekeeping.
+                        </li>
+                        <li style="margin: 8px;" id="rebirthNote1" class="hidden">
+                            On your 45th birthday, you feel the amulet shiver uncontrollably in your pocket. You take it
+                            out and the constant shivering suddenly stops. More to your bizarre surprise, you notice
+                            a strange etching on the centre of the amulet.
+                        </li>
+                        <li style="margin: 8px;" id="rebirthNote2" class="hidden">
+                            <div style="margin-bottom: 8px">
+                                On your 65th birthday, you once again encounter the strange, unexplained shivering from your
+                                amulet. But this time, a living eyeball emerges from the centre. Although terribly frightened,
+                                you realise you do not have many years to live left anyway so you consider touching the eye
+                                to see what happens.
+                            </div>
+                            <i style="color: grey">
+                                By touching the eyeball, you will be 
+reborn and have to restart life again, losing all your levels and coins.
+                                However, you will gain <b>xp multipliers</b> for your jobs and skills equivalent to: <b>1 + the max level of the skill or job / 10.</b>
+                                This means you will learn everything 
+again much more quickly than you did in your previous life. <span style="color: rgb(200, 0, 0)">
+                                Something tells you that the amulet might transform even further after living for <b>2 whole centuries</b>...</span>
+                            </i>
+                            <br>
+                            <button class="w3-button button" style="margin-bottom: 8px; margin-top: 8px" onclick="rebirthOne()">Touch the eye</button>
+                            <br>
+                        </li>
+                        <li style="margin: 8px;" id="rebirthNote3" class="hidden">
+                            <div style="margin-bottom: 8px;">
+                                Your gut instinct was right. The moment 
+you hit the grand age of 200, you hear an ominous hum coming from the 
+amulet.
+                                A mouth emerges from its surface and 
+begins to cackle, and proceeds to say: "So you've made it this far... 
+Are you ready to embrace evil?"
+                            </div>
+                            <i style="color: rgb(200, 0, 0)">
+                                If you decide to embrace evil, all of your levels, coins and even max levels will be reset.
+                                You will be reborn as a fresh slate. However, you will unlock a new line of skills and gain
+                                <b><span id="evilGainDisplay">1.0</span> evil</b>, which will heavily impact your future lives.
+                            </i>
+                            <br>
+                                <button class="w3-button button" style="margin-bottom: 8px; margin-top: 8px" onclick="rebirthTwo()">Embrace evil</button>
+                            <br>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tab" id="settings" style="display: none;">
+                    <ul>
+                        <li>
+                            <h2>Import/export save</h2>
+                            <button class="w3-button button" onclick="importGameData()">Import</button>
+                            <button class="w3-button button" onclick="exportGameData()">Export</button>
+                            <form style="margin-top: 16px"> 
+                                <input id="importExportBox" type="text" style="width:300px; height:30px">
+                            </form>
+                        </li>
+                        <li>
+                            <h2>Toggle light/dark mode</h2>
+                            <button class="w3-button button" onclick="setLightDarkMode()">Toggle</button>
+                        </li>
+                        <li>
+                            <h2>Join the discord community!</h2>
+                            <a href="https://discord.gg/fTRS4pHGka" target="_blank">
+                                <img src="index_data/discord_icon_130958.png" width="100" height="100">
+                            </a>
+                        </li>
+                        <li>
+                            <h2>Hard reset game</h2>
+                            <button class="w3-button button w3-red" onclick="resetGameData()">Reset</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script type="text/javascript" src="index_data/HackTimer.js"></script>
+<script type="text/javascript" src="index_data/classes.js"></script>
+<script type="text/javascript" src="index_data/main.js"></script>
+
+</body></html>
