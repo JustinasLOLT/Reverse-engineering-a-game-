@@ -1,8 +1,8 @@
 #canvas1 {
-      widows: 1024px;
-      height: 1024px;
+      widows: 800px;
+      height: 500px;
       border: 1px solid #403F4C;
-      background: #E84855;
+      background: #e84855;
       position: absolute;
       top:10%;
       left:10%;
